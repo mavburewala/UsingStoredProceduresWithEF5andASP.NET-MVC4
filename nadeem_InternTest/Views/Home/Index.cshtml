@@ -1,0 +1,53 @@
+﻿@model List<nadeem_InternTest.Models.Customer>
+@if(Model!=null)
+{  <h1>Search Result</h1>
+    <table class="table">
+        <tr>
+            <th>Customer ID</th>
+            <th>Fore Name</th>
+            <th>Sur Name</th>
+            <th>Address</th>
+            <th>Post Code</th>
+            <th>Notes</th>
+        </tr>
+        @foreach(var item in Model)
+        { 
+           <tr>
+            <td>@item.Id</td>
+            <td>@item.Forename</td>
+            <td>@item.Surname</td>
+            <td>@item.Address</td>
+            <td>@item.Postcode</td>
+            <td>@item.Notes</td>
+           </tr>
+        }
+    </table>
+}
+<form class="form-horizontal" role="form" action="" method="Post">
+  <div class="form-group">
+    <label for="forename" class="col-sm-2 control-label">First Name</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="forename" name="forename" placeholder="First Name">
+    </div>
+  </div>
+ <div class="form-group">
+    <label for="surname" class="col-sm-2 control-label">Sur Name</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="surname" name="surname" placeholder="Sur-Name">
+    </div>
+  </div>
+    <div class="form-group">
+    <label for="postcode" class="col-sm-2 control-label">Post Code</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="postcode"  name="postcode" placeholder="Post Code">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+     <div class="form-actions">
+    <input class="btn btn-primary" type="submit" value="Search" />
+    <input class="btn btn-danger" type="reset" value="Cancel" />
+  </div>
+    </div>
+  </div>
+</form>

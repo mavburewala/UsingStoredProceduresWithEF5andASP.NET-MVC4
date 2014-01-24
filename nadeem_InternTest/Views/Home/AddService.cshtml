@@ -1,0 +1,104 @@
+﻿<div ng-app ng-controller="addservice">
+<form class="form-horizontal" name="myForm" ng-submit="add(myForm.service.$viewValue)" >
+  <div class="form-group">
+    <label for="VehicleID" class="col-sm-2 control-label">Vehicle Id</label>
+    <div class="col-sm-10">
+      <input type="number" class="form-control" id="VehicleID" name="VehicleID" ng-model="service.vehicleid" required>
+    </div>
+  </div>
+ <div class="form-group">
+    <label for="MechanicName" class="col-sm-2 control-label">MechanicName</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="MechanicName" name="MechanicName" placeholder="MechanicName" ng-model="service.mechanicname" required>
+    </div>
+  </div>
+    <div class="form-group">
+    <label for="Notes" class="col-sm-2 control-label">Notes</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="Notes"  name="Notes" placeholder="Notes" ng-model="service.notes">
+    </div>
+  </div>
+    <div class="form-group">
+    <label for="Money" class="col-sm-2 control-label">Money</label>
+    <div class="col-sm-10">
+      <input type="number" class="form-control" id="Money"  name="Money" placeholder="Money" ng-model="service.money" required>
+    </div>
+  </div>
+    <div class="form-group">
+    <label for="Date_Time" class="col-sm-2 control-label">Date</label>
+    <div class="col-sm-10">
+      <input type="datetime-local" class="form-control" id="Date_Time"  name="Date_Time" ng-model="service.date">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+     <div class="form-actions">
+    <input class="btn btn-primary" type="submit" value="Search" />
+    <input class="btn btn-danger" type="reset" value="Cancel" ng-click="reset()"/>
+  </div>
+    </div>
+  </div>
+</form>
+    <h1>Result will be shown here</h1>
+<strong>{{status}}!  </strong>  Errors( if any) : {{errors}}
+    </div>
+
+
+
+     @section Scripts{
+         <script src="/Scripts/angular.min.js"></script>
+         <script src="/Scripts/alert.js"></script>
+         <script>
+
+         </script>
+
+
+         <script>
+             function addservice($scope, $http) {
+                 $scope.reset = function () {
+                     $scope.service = { "vehicleid": null, "mechanicname": null, "notes": null, "money": null, "date": null }
+                     $scope.status = "";
+                     $scope.errors = "";
+                 };
+                 $scope.status = "";
+                 $scope.errors = "";
+                 $scope.service = { "vehicleid": null, "mechanicname": null, "notes": null, "money": null ,"date":null}
+                 $scope.add = function (a) {
+                     console.log($scope.service);
+                     $http({
+                         url: "/api/VehicleService/Add",
+                         method: "POST",
+                         params: { Service: $scope.service }
+                     }).
+                     success(function (data, status, headers, config) {
+                         console.log("Success");
+                         console.log(data);
+                         console.log(status);
+                         console.log(headers);
+                         if (data.success == true) {
+                             $scope.reset();
+                             $scope.status = "Suucessful";
+                             $scope.errors = "Nill";
+                         }
+                         else {
+                             $scope.status = "Failed";
+                             $scope.errors = data.errors;
+                         }
+
+                     }).
+                     error(function (data, status, headers, config) {
+                         console.log("Failed");
+                         console.log(data);
+                         console.log(status);
+                         console.log(headers);
+                         $scope.status = "Error";
+                         $scope.errors = "Service Call couldn't be made";
+                     });
+                 }
+             }
+             </script>
+         
+             
+
+        
+  }

@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="VehicleServicingModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="VehicleServicingEntities" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="Customers" EntityType="VehicleServicingModel.Customer" />
+    <EntitySet Name="Vehicles" EntityType="VehicleServicingModel.Vehicle" />
+    <EntitySet Name="VehicleServices" EntityType="VehicleServicingModel.VehicleService" />
+    <AssociationSet Name="FK_Vehicles_Customers" Association="VehicleServicingModel.FK_Vehicles_Customers">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="Vehicles" EntitySet="Vehicles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VehicleServices_Vehicles" Association="VehicleServicingModel.FK_VehicleServices_Vehicles">
+      <End Role="Vehicles" EntitySet="Vehicles" />
+      <End Role="VehicleServices" EntitySet="VehicleServices" />
+    </AssociationSet>
+    <FunctionImport Name="SearchCustomerProcedure" ReturnType="Collection(VehicleServicingModel.SearchCustomerProcedure_Result)">
+      <Parameter Name="forename" Mode="In" Type="String" />
+      <Parameter Name="surname" Mode="In" Type="String" />
+      <Parameter Name="postcode" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SelectCustomerProcedure" ReturnType="Collection(VehicleServicingModel.SelectCustomerProcedure_Result)">
+      <Parameter Name="customerId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="ThoroughDetailProcedure" ReturnType="Collection(VehicleServicingModel.ThoroughDetailProcedure_Result)">
+      <Parameter Name="id" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="Forename" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="Surname" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="Address" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+    <Property Name="Postcode" Type="String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="false" />
+    <Property Name="Notes" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="Vehicles" Relationship="VehicleServicingModel.FK_Vehicles_Customers" FromRole="Customers" ToRole="Vehicles" />
+  </EntityType>
+  <EntityType Name="Vehicle">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="CustomerID" Type="Int32" Nullable="false" />
+    <Property Name="Make" Type="String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="false" />
+    <Property Name="Model" Type="String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="false" />
+    <Property Name="Variation" Type="String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="false" />
+    <Property Name="FuelType" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="Year" Type="String" Nullable="false" MaxLength="4" Unicode="false" FixedLength="true" />
+    <Property Name="Colour" Type="String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Customer" Relationship="VehicleServicingModel.FK_Vehicles_Customers" FromRole="Vehicles" ToRole="Customers" />
+    <NavigationProperty Name="VehicleServices" Relationship="VehicleServicingModel.FK_VehicleServices_Vehicles" FromRole="Vehicles" ToRole="VehicleServices" />
+  </EntityType>
+  <EntityType Name="VehicleService">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="VehicleID" Type="Int32" Nullable="false" />
+    <Property Name="MechanicName" Type="String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="false" />
+    <Property Name="Notes" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <Property Name="Price" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="ServiceDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Vehicle" Relationship="VehicleServicingModel.FK_VehicleServices_Vehicles" FromRole="VehicleServices" ToRole="Vehicles" />
+  </EntityType>
+  <Association Name="FK_Vehicles_Customers">
+    <End Role="Customers" Type="VehicleServicingModel.Customer" Multiplicity="1" />
+    <End Role="Vehicles" Type="VehicleServicingModel.Vehicle" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Vehicles">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VehicleServices_Vehicles">
+    <End Role="Vehicles" Type="VehicleServicingModel.Vehicle" Multiplicity="1" />
+    <End Role="VehicleServices" Type="VehicleServicingModel.VehicleService" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vehicles">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="VehicleServices">
+        <PropertyRef Name="VehicleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="SearchCustomerProcedure_Result">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Forename" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Surname" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Address" Nullable="false" MaxLength="250" />
+    <Property Type="String" Name="Postcode" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Notes" Nullable="true" MaxLength="Max" />
+  </ComplexType>
+  <ComplexType Name="SelectCustomerProcedure_Result">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Forename" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Surname" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Address" Nullable="false" MaxLength="250" />
+    <Property Type="String" Name="Postcode" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Notes" Nullable="true" MaxLength="Max" />
+    <Property Type="Int32" Name="ID1" Nullable="false" />
+    <Property Type="Int32" Name="CustomerID" Nullable="false" />
+    <Property Type="String" Name="Make" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Model" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Variation" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="FuelType" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Year" Nullable="false" MaxLength="4" />
+    <Property Type="String" Name="Colour" Nullable="false" MaxLength="20" />
+    <Property Type="Int32" Name="ID2" Nullable="true" />
+    <Property Type="Int32" Name="VehicleID" Nullable="true" />
+    <Property Type="String" Name="MechanicName" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Notes1" Nullable="true" MaxLength="Max" />
+    <Property Type="Decimal" Name="Price" Nullable="true" Precision="19" />
+    <Property Type="DateTime" Name="ServiceDate" Nullable="true" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="ThoroughDetailProcedure_Result">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Forename" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Surname" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Address" Nullable="false" MaxLength="250" />
+    <Property Type="String" Name="Postcode" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Notes" Nullable="true" MaxLength="Max" />
+    <Property Type="Int32" Name="ID1" Nullable="false" />
+    <Property Type="Int32" Name="CustomerID" Nullable="false" />
+    <Property Type="String" Name="Make" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Model" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Variation" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="FuelType" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Year" Nullable="false" MaxLength="4" />
+    <Property Type="String" Name="Colour" Nullable="false" MaxLength="20" />
+    <Property Type="Int32" Name="ID2" Nullable="true" />
+    <Property Type="Int32" Name="VehicleID" Nullable="true" />
+    <Property Type="String" Name="MechanicName" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Notes1" Nullable="true" MaxLength="Max" />
+    <Property Type="Decimal" Name="Price" Nullable="true" Precision="19" />
+    <Property Type="DateTime" Name="ServiceDate" Nullable="true" Precision="23" />
+  </ComplexType>
+</Schema>
