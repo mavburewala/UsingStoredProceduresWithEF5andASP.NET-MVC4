@@ -1,0 +1,148 @@
+﻿@model List<nadeem_InternTest.Models.Customer>
+<form class="form-horizontal" role="form" action="" method="Post">
+  <div class="form-group">
+      <div class="input-group input-group-lg">
+          <span class="input-group-addon">CustomerID</span>
+          <input type="number" name="customerId" class="form-control" >
+      </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+     <div class="form-actions">
+    <input class="btn btn-primary" type="submit" value="Search" />
+    <input class="btn btn-danger" type="reset" value="Cancel" />
+  </div>
+    </div>
+  </div>
+</form>
+@if(Model!=null&&Model.Count>0)
+{  
+    if (Model.Count == 1)
+    {
+        <h1>Search Result</h1>
+    }
+    else
+    {
+        <h1>Complete List</h1>
+    }
+    <table class="table table-bordered">
+        <tr>
+            <th>Customer ID</th>
+            <th>Fore Name</th>
+            <th>Sur Name</th>
+            <th>Address</th>
+            <th>Post Code</th>
+            <th>Notes</th>
+            <th>Vehicles</th>
+        </tr>
+        @foreach(var item in Model)
+        { 
+           <tr>
+            <td>@item.Id</td>
+            <td>@item.Forename</td>
+            <td>@item.Surname</td>
+            <td>@item.Address</td>
+            <td>@item.Postcode</td>
+            <td>@item.Notes</td>
+            <td class="success">
+                   <div class="panel-group" id="accordion_@item.Id">
+                       <div class="panel panel-default">
+                           <div class="panel-heading">
+                               <h4 class="panel-title">
+                                   <a data-toggle="collapse" data-parent="#accordion_@item.Id" href="#collapse_@item.Id">
+                                       Expand to See Vehicless
+
+                                   </a>
+
+                               </h4>
+
+                           </div>
+                           <div id="collapse_@item.Id" class="panel-collapse collapse" style="overflow:scroll">
+                               <div class="panel-body">
+                                   <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <th>Customer ID</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Variation</th>
+            <th>Year</th>
+            <th>Color</th>
+            <th>Services</th>
+        </tr>
+        @foreach(var item1 in item.Vehicles)
+        { 
+           <tr>
+            <td>@item1.Id</td>
+            <td>@item1.CustomerId</td>
+            <td>@item1.Make</td>
+            <td>@item1.Model</td>
+            <td>@item1.Variation</td>
+               <td>@item1.Year</td>
+            <td>@item1.Colour</td>
+            <td class="success">
+                   <div class="panel-group" id="vehicleaccordion_@item1.Id" >
+                       <div class="panel panel-default">
+                           <div class="panel-heading">
+                               <h4 class="panel-title">
+                                   <a data-toggle="collapse" data-parent="#vehicleaccordion_@item1.Id" href="#vehiclecollapse_@item1.Id">
+                                       Expand to See Services
+
+                                   </a>
+
+                               </h4>
+
+                           </div>
+                           <div id="vehiclecollapse_@item1.Id" class="panel-collapse collapse" style="overflow:scroll">
+                               <div class="panel-body">
+                                   <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <th>Vehicle ID</th>
+            <th>Mechanic Name</th>
+            <th>Notes</th>
+            <th>Price</th>
+            <th>Service Date</th>
+        </tr>
+        @foreach(var item2 in item1.Services)
+        { 
+           <tr>
+            <td>@item2.Id</td>
+            <td>@item2.VehicleID</td>
+            <td>@item2.MechanicName</td>
+            <td>@item2.Notes</td>
+            <td>@item2.Money</td>
+            <td>@item2.Date_Time</td>
+           </tr>
+        }
+    </table>
+                               </div>
+
+                           </div>
+
+                       </div>
+
+                   </div>
+
+               </td>
+           </tr>
+        }
+    </table>
+                               </div>
+
+                           </div>
+
+                       </div>
+
+                   </div>
+
+               </td>
+           </tr>
+        }
+    </table>
+  
+}
+else
+{
+    <h1>NO RESULT FOUND</h1>
+}

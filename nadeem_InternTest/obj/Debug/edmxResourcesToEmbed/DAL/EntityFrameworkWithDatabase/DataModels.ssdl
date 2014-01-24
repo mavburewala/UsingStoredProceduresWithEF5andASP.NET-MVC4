@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="VehicleServicingModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="VehicleServicingModelStoreContainer">
+    <EntitySet Name="Customers" EntityType="VehicleServicingModel.Store.Customers" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Vehicles" EntityType="VehicleServicingModel.Store.Vehicles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="VehicleServices" EntityType="VehicleServicingModel.Store.VehicleServices" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_Vehicles_Customers" Association="VehicleServicingModel.Store.FK_Vehicles_Customers">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="Vehicles" EntitySet="Vehicles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VehicleServices_Vehicles" Association="VehicleServicingModel.Store.FK_VehicleServices_Vehicles">
+      <End Role="Vehicles" EntitySet="Vehicles" />
+      <End Role="VehicleServices" EntitySet="VehicleServices" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Customers">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Forename" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Surname" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Address" Type="nvarchar" Nullable="false" MaxLength="250" />
+    <Property Name="Postcode" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="Notes" Type="text" />
+  </EntityType>
+  <EntityType Name="Vehicles">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="CustomerID" Type="int" Nullable="false" />
+    <Property Name="Make" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="Model" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="Variation" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="FuelType" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Year" Type="char" Nullable="false" MaxLength="4" />
+    <Property Name="Colour" Type="nvarchar" Nullable="false" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="VehicleServices">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="VehicleID" Type="int" Nullable="false" />
+    <Property Name="MechanicName" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="Notes" Type="text" />
+    <Property Name="Price" Type="money" Nullable="false" />
+    <Property Name="ServiceDate" Type="datetime" />
+  </EntityType>
+  <Association Name="FK_Vehicles_Customers">
+    <End Role="Customers" Type="VehicleServicingModel.Store.Customers" Multiplicity="1" />
+    <End Role="Vehicles" Type="VehicleServicingModel.Store.Vehicles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Vehicles">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VehicleServices_Vehicles">
+    <End Role="Vehicles" Type="VehicleServicingModel.Store.Vehicles" Multiplicity="1" />
+    <End Role="VehicleServices" Type="VehicleServicingModel.Store.VehicleServices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vehicles">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="VehicleServices">
+        <PropertyRef Name="VehicleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="SearchCustomerProcedure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="forename" Type="nvarchar" Mode="In" />
+    <Parameter Name="surname" Type="nvarchar" Mode="In" />
+    <Parameter Name="postcode" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SelectCustomerProcedure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="customerId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="ThoroughDetailProcedure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="id" Type="int" Mode="In" />
+  </Function>
+  <!--Errors Found During Generation:
+      warning 6005: The function 'InsertServiceDetailProcedure' has a parameter 'serviceDetails' at parameter index 0 that has a data type 'table type' which is currently not supported for the target .NET Framework version. The function was excluded.
+      
+      <Function Name="InsertServiceDetailProcedure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Parameter Name="customerId" Type="int" Mode="In" />
+      </Function>-->
+</Schema>

@@ -1,0 +1,144 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+    <title>@ViewBag.Title - Nadeem Internship Test</title>
+
+    <!-- Bootstrap core CSS -->
+     @Styles.Render("~/Content/bootstrap")
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom styles for this template -->
+    @Styles.Render("~/Content/carousel")
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>
+    <div class="navbar-wrapper">
+      <div class="container">
+
+        <div class="navbar navbar-inverse navbar-static-top" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+               <p class="navbar-brand">@Html.ActionLink("Nadeem Internship Test", "Index", "Home")</p>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("Customer Details", "ShowCustomerDetails", "Home")</li>
+                <li>@Html.ActionLink("Service Your Car", "AddService", "Home")</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="item active">
+          <img data-src="holder.js/900x500/auto/#777:#7a7a7a/text:Search" alt="Search">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Search for Customer.</h1>
+              <p>Search for a Customer by Forename,SurName or Postcode</p>
+              <p><div class="btn btn-lg btn-primary"  role="button">@Html.ActionLink("Search", "Index", "Home")</div></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img data-src="holder.js/900x500/auto/#666:#6a6a6a/text:Get Details" alt="Get Details">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Get Customer Details.</h1>
+              <p>Select a Customer to View His/Her Details OR Get List of all Customers with their Details</p>
+              <p><div class="btn btn-lg btn-primary" role="button">@Html.ActionLink("Customer Details", "ShowCustomerDetails", "Home")</div></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img data-src="holder.js/900x500/auto/#555:#5a5a5a/text:Add Service" alt="Add Service">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Add Service for your Car</h1>
+              <p>Enter a New Service Detail for a Customer'car</p>
+              <p><div class="btn btn-lg btn-primary"  role="button">@Html.ActionLink("Service Your Car", "AddService", "Home")</div></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div><!-- /.carousel -->
+
+
+
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+
+    <div class="container marketing">
+
+      <!-- Three columns of text below the carousel -->
+
+
+
+      <!-- START THE FEATURETTES -->
+
+
+      @RenderBody()
+      <!-- /END THE FEATURETTES -->
+
+        <hr class="featurette-divider">
+      <!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2013 Muhammad Nadeem Azam, Internship Test. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+     @Scripts.Render("~/bundles/jquery")
+     @Scripts.Render("~/bundles/bootstrap");
+      @Scripts.Render("~/bundles/carousel");
+ 
+       @RenderSection("scripts", required: false)
+  
+  </body>
+</html>
+
+
