@@ -1,0 +1,58 @@
+/* This stored procedure Search for a customer by forename,surname or postcode */
+CREATE PROCEDURE [dbo].[SearchCustomerProcedure]
+	@forename NVARCHAR(50) = NULL,
+	@surname NVARCHAR(50)=NULL,
+	@postcode NVARCHAR(20)=NULL
+AS
+SELECT * 
+FROM [dbo].[Customers]
+WHERE [dbo].[Customers].[Forename]=ISNULL(@forename,[dbo].[Customers].[Forename])
+	AND [dbo].[Customers].[Surname]=ISNULL(@surname,[dbo].[Customers].[Surname])
+	AND [dbo].[Customers].[Postcode]=ISNULL(@postcode,[dbo].[Customers].[Postcode])
+
+
+
+
+/* This stored procedure lets you to Enter a new service detail for a customer'c vehicle to save in database */
+CREATE PROCEDURE [dbo].[InsertServiceDetailProcedure]
+
+    @VehicleID    INT  ,  
+    @MechanicName NVARCHAR (20),
+    @Notes        TEXT ,
+    @Price        MONEY ,
+    @ServiceDate  DATETIME
+AS
+	INSERT INTO [dbo].[VehicleServices]
+	VALUES(@VehicleID,@MechanicName,@Notes,@Price,@ServiceDate)
+RETURN 0
+
+
+
+
+/*
+It serves 2 purposes    1.if it gets no parameter, it lists all customers with their details
+                        2. Incase it gets customerid as parameter, it shows details of that customer
+
+It returns multiple resultsets
+ */
+CREATE PROCEDURE [dbo].[SelectCustomerProcedure]
+	@customerId INT = null
+AS
+	DECLARE @VehicleIds TABLE (id INT)
+	SELECT *
+	FROM [dbo].[Customers]
+	WHERE [dbo].[Customers].[ID]=ISNULL(@customerId,[dbo].[Customers].[ID])
+
+	SELECT *
+	FROM [dbo].[Vehicles]
+	WHERE [dbo].[Vehicles].[CustomerID]=ISNULL(@customerId,[dbo].[Vehicles].[CustomerID])
+
+	INSERT INTO @VehicleIds
+	(id)
+	SELECT [dbo].[Vehicles].[ID]
+	FROM [dbo].[Vehicles]
+	WHERE [dbo].[Vehicles].[CustomerID]=ISNULL(@customerId,[dbo].[Vehicles].[CustomerID])
+
+	SELECT *
+	FROM [dbo].[VehicleServices]
+	WHERE [dbo].[VehicleServices].[VehicleID] IN (SELECT id FROM @VehicleIds)
