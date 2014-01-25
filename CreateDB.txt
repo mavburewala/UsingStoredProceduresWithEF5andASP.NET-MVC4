@@ -1,0 +1,116 @@
+﻿USE [VehicleServicing]
+GO
+/****** Object:  Table [dbo].[Customers]    Script Date: 04/12/2011 11:24:59 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Customers]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Customers](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Forename] [nvarchar](50) NOT NULL,
+	[Surname] [nvarchar](50) NOT NULL,
+	[Address] [nvarchar](250) NOT NULL,
+	[Postcode] [nvarchar](20) NOT NULL,
+	[Notes] [text] NULL,
+ CONSTRAINT [PK_Customers] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+/****** Object:  Table [dbo].[Vehicles]    Script Date: 04/12/2011 11:24:59 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Vehicles]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[Vehicles](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[CustomerID] [int] NOT NULL,
+	[Make] [nvarchar](20) NOT NULL,
+	[Model] [nvarchar](20) NOT NULL,
+	[Variation] [nvarchar](20) NOT NULL,
+	[FuelType] [nvarchar](50) NOT NULL,
+	[Year] [char](4) NOT NULL,
+	[Colour] [nvarchar](20) NOT NULL,
+ CONSTRAINT [PK_Vehicles] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[VehicleServices]    Script Date: 04/12/2011 11:24:59 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[VehicleServices]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[VehicleServices](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[VehicleID] [int] NOT NULL,
+	[MechanicName] [nvarchar](20) NOT NULL,
+	[Notes] [text] NULL,
+	[Price] [money] NOT NULL,
+	[ServiceDate] [datetime] NULL,
+ CONSTRAINT [PK_VehicleServices] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+/****** Object:  ForeignKey [FK_Vehicles_Customers]    Script Date: 04/12/2011 11:24:59 ******/
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Vehicles_Customers]') AND parent_object_id = OBJECT_ID(N'[dbo].[Vehicles]'))
+ALTER TABLE [dbo].[Vehicles]  WITH CHECK ADD  CONSTRAINT [FK_Vehicles_Customers] FOREIGN KEY([CustomerID])
+REFERENCES [dbo].[Customers] ([ID])
+GO
+ALTER TABLE [dbo].[Vehicles] CHECK CONSTRAINT [FK_Vehicles_Customers]
+GO
+/****** Object:  ForeignKey [FK_VehicleServices_Vehicles]    Script Date: 04/12/2011 11:24:59 ******/
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_VehicleServices_Vehicles]') AND parent_object_id = OBJECT_ID(N'[dbo].[VehicleServices]'))
+ALTER TABLE [dbo].[VehicleServices]  WITH CHECK ADD  CONSTRAINT [FK_VehicleServices_Vehicles] FOREIGN KEY([VehicleID])
+REFERENCES [dbo].[Vehicles] ([ID])
+GO
+ALTER TABLE [dbo].[VehicleServices] CHECK CONSTRAINT [FK_VehicleServices_Vehicles]
+GO
+
+
+
+set identity_insert customers on
+INSERT INTO [customers] ([ID],[Forename],[Surname],[Address],[Postcode],[Notes])VALUES(1,'Tony','Kenny','123 Some Street, Anytown','AB1 2CD','New customer')
+INSERT INTO [customers] ([ID],[Forename],[Surname],[Address],[Postcode],[Notes])VALUES(2,'John','Smith','12 High Street, Bingham, Notts','NG12 4JU','Courtesy car required for each service')
+INSERT INTO [customers] ([ID],[Forename],[Surname],[Address],[Postcode],[Notes])VALUES(3,'Angela','Rippon','12 Oak Drive, Nottingham','NG4 1GH',NULL)
+INSERT INTO [customers] ([ID],[Forename],[Surname],[Address],[Postcode],[Notes])VALUES(4,'Billy','Brag','87 Falkik Avenue, Stamford','PE9 1UY',NULL)
+INSERT INTO [customers] ([ID],[Forename],[Surname],[Address],[Postcode],[Notes])VALUES(5,'Jackie','Kennedy','48 London Road, Newark','NG24 4TG',NULL)
+INSERT INTO [customers] ([ID],[Forename],[Surname],[Address],[Postcode],[Notes])VALUES(6,'Paul','Kelly','12 Harcourt Street, Newark','NG24 1TH',NULL)
+set identity_insert customers off
+
+set identity_insert vehicles on
+INSERT INTO [vehicles] ([ID],[CustomerID],[Make],[Model],[Variation],[FuelType],[Year],[Colour])VALUES(1,1,'Ford','Mondeo','Ghia','Petrol','1997','Black')
+INSERT INTO [vehicles] ([ID],[CustomerID],[Make],[Model],[Variation],[FuelType],[Year],[Colour])VALUES(2,1,'Renault','Espace','TDI','Diesel','2000','Purple')
+INSERT INTO [vehicles] ([ID],[CustomerID],[Make],[Model],[Variation],[FuelType],[Year],[Colour])VALUES(4,1,'Porche','Boxter','n/a','Petrol','2005','Red')
+INSERT INTO [vehicles] ([ID],[CustomerID],[Make],[Model],[Variation],[FuelType],[Year],[Colour])VALUES(5,2,'Peugeot','505','E','LPG','1990','White')
+INSERT INTO [vehicles] ([ID],[CustomerID],[Make],[Model],[Variation],[FuelType],[Year],[Colour])VALUES(6,3,'VW','Golf','S','Petrol','2002','Black')
+INSERT INTO [vehicles] ([ID],[CustomerID],[Make],[Model],[Variation],[FuelType],[Year],[Colour])VALUES(7,3,'BMW','528','i','Petrol','2000','Blue')
+INSERT INTO [vehicles] ([ID],[CustomerID],[Make],[Model],[Variation],[FuelType],[Year],[Colour])VALUES(8,6,'Ford','Escort','TD','Diesel','1990','Red')
+set identity_insert vehicles off
+
+set identity_insert [vehicleservices] on
+INSERT INTO [vehicleservices] ([ID],[VehicleID],[MechanicName],[Notes],[Price],[ServiceDate])VALUES(1,2,'Tony','Full service',350.4500,'Jan 25 2008 12:00:00:000AM')
+INSERT INTO [vehicleservices] ([ID],[VehicleID],[MechanicName],[Notes],[Price],[ServiceDate])VALUES(2,2,'Bill','Interim service',125.2600,'Jan 25 2011 12:00:00:000AM')
+INSERT INTO [vehicleservices] ([ID],[VehicleID],[MechanicName],[Notes],[Price],[ServiceDate])VALUES(3,4,'Tony','Winter check',55.0000,'Nov 15 2010 12:00:00:000AM')
+INSERT INTO [vehicleservices] ([ID],[VehicleID],[MechanicName],[Notes],[Price],[ServiceDate])VALUES(4,6,'Bill','Fix coolant leak',65.2300,'Mar 26 2011 12:00:00:000AM')
+INSERT INTO [vehicleservices] ([ID],[VehicleID],[MechanicName],[Notes],[Price],[ServiceDate])VALUES(5,6,'Bill','Winter Check',55.0000,'Nov 30 2010 12:00:00:000AM')
+INSERT INTO [vehicleservices] ([ID],[VehicleID],[MechanicName],[Notes],[Price],[ServiceDate])VALUES(6,7,'Alan','Full service',450.0000,'Jan  5 2011 12:00:00:000AM')
+set identity_insert [vehicleservices] oFF
+
